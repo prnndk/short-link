@@ -7,14 +7,30 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+<nav class="flex items-center justify-between flex-wrap p-6">
+    <div class="flex items-center flex-shrink-0 text-gray-700 mr-6">
+        <span class="font-semibold text-xl tracking-tight">drsk.my.id</span>
+    </div>
+    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+        <div class="text-sm lg:flex-grow">
+            <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-gray-700 hover:text-teal-600 mr-4">
+                Docs
+            </a>
+        </div>
+        <div>
+            <a href="{{route('login')}}" class="inline-block text-sm px-4 py-2 leading-none border rounded text-gray-800 border-teal-300 hover:border-transparent hover:text-white hover:bg-teal-300 mt-4 lg:mt-0">Login</a>
+        </div>
+    </div>
+</nav>
   <div class="container mx-auto mt-5 px-4">
-    <h1 class="text-3xl">
-      Link Shortener of smasa.id
+    <h1 class="text-2xl" id="header">
+      Make a shortlink that easy to remember
     </h1>
+      <p class="text-green-500 font-medium" id="success"></p>
     @if (session()->has('success'))
       <p class="text-green-500">{{ session()->get('success') }}</p>
     @endif
-    <form class="w-full max-w-lg mt-5" action="/" method="post" role="form" autocomplete="off">
+    <form class="w-full max-w-md mt-5" autocomplete="off">
       @csrf
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full px-3">
@@ -30,7 +46,7 @@
           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="link">
             Very long Link
           </label>
-          <input class="appearance-none block w-full bg-gray-200 text-gray-700 border @error('link')border-red-500 @enderror rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="link" name="link" type="url" placeholder="Input Your Link" required value="{{ old('link') }}">
+          <input class="appearance-none block w-full bg-gray-200 text-gray-700 border @error('link')border-red-500 @enderror rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="link" name="link" type="url" placeholder="Very Long Link" required value="{{ old('link') }}">
           @error('link')
           <p class="text-red-500 text-xs italic">{{ $message }}</p>
           @enderror
@@ -56,6 +72,7 @@
   </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
     function generateString(length) {
@@ -67,7 +84,7 @@
     return result;
 }
 $(document).ready(function (){
-$('#genrand').click(function (e) { 
+$('#genrand').click(function (e) {
   e.preventDefault();
   $("#shortlink").val(generateString(7));
 })
@@ -105,13 +122,34 @@ $('#shortlink').on('input',function(){
     })
   }
 })
-// $('#send').click(function () { 
-//   $.ajax({
-//     url:"{{ route('store') }}",
-//     method:"POST",
-//     data:
-//   })
-//  })
+ $('#send').click(function (e) {
+     e.preventDefault();
+     let name=$('#name').val();
+     let link = $('#link').val();
+     let short=$('#shortlink').val();
+   $.ajax({
+     url:"/api/links",
+     type:'POST',
+       dataType:'JSON',
+     data:{
+         'token':'API_TOKEN',
+         'name':name,
+         'link':link,
+         'shortlink':short,
+     },
+     success:function (response){
+         Swal.fire({
+             'title':'success',
+             'text':response.message,
+             'icon':'success',
+         })
+         $('#name').val(" ");
+         $('#link').val(" ");
+         $('#shortlink').val(" ");
+         $("#success").html('https://drsk.my.id/'+response.data.shortlink)
+     }
+   })
+  })
 });
 </script>
 </html>

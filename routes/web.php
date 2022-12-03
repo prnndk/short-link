@@ -14,9 +14,11 @@ use App\Http\Controllers\LinkController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+require __DIR__.'/auth.php';
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 Route::resource('/',LinkController::class);
 Route::get('/{links:shortlink}',[LinkController::class,'goLink']);
 Route::get('/{links:shortlink}/my',[LinkController::class,'detail'])->name('detail');

@@ -57,9 +57,13 @@ class LinkController extends Controller
             'link_id'=>$stored->id,
             'linkhit'=>0
         ]);
-        return redirect('/')->with('success','Berhasil memperpendek link, lihat kunjungan di'.route('detail',$validateData['shortlink']));
+//        return redirect('/')->with('success','Berhasil memperpendek link, lihat kunjungan di'.route('detail',$validateData['shortlink']));
+        return response()->json([
+           'status'=>200,
+           'msg'=>'succes making shortlink'
+        ]);
     }
-    
+
     public function goLink($id)
     {
        $getLink=Link::where('shortlink',$id)->first();
@@ -76,7 +80,7 @@ class LinkController extends Controller
        }else{
         abort('404');
        }
-       
+
     }
     public function detail($link)
     {
