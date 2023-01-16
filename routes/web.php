@@ -22,4 +22,3 @@ Route::get('/dashboard', function () {
 Route::resource('/',LinkController::class);
 Route::get('/{links:shortlink}',[LinkController::class,'goLink']);
 Route::get('/{links:shortlink}/my',[LinkController::class,'detail'])->name('detail');
-Route::post('/api/cekLink',[LinkController::class,'cek'])->name('cekLink');

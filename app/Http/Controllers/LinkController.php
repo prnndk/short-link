@@ -42,11 +42,7 @@ class LinkController extends Controller
      */
     public function store(StorelinkRequest $request)
     {
-        $validateData=$request->validate([
-            'name'=>'required',
-            'link'=>'required|url',
-            'shortlink'=>'required|unique:links|alpha_dash',
-        ]);
+        $validateData=$request->validated();
         if($request->shortlink==null)
         {
             $validateData['link']=Str::random(5);
@@ -103,15 +99,9 @@ class LinkController extends Controller
             ]);
             if($validate->fails())
             {
-                return response()->json([
-                    'status'=>'error',
-                    'msg'=>$validate->messages()
-                ]);
+                return response()->json('error',422);
             }else{
-                return response()->json([
-                    'status'=>'success',
-                    'msg'=>'Lolos Validasi'
-                ]);
+                return response()->json('success',200);
             }
         }
     }

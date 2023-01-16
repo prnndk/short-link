@@ -13,7 +13,7 @@ class StorelinkRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,7 +24,9 @@ class StorelinkRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'=>'required|unique:links',
+            'link'=>'required|url',
+            'shortlink'=>'required|unique:links|alpha_dash',
         ];
     }
 }

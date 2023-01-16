@@ -128,11 +128,11 @@ $('#shortlink').on('input',function(){
      let link = $('#link').val();
      let short=$('#shortlink').val();
    $.ajax({
-     url:"/api/links",
+     url:"https://smasa.id/api/links",
      type:'POST',
        dataType:'JSON',
      data:{
-         'token':'API_TOKEN',
+         'token':'357203',
          'name':name,
          'link':link,
          'shortlink':short,
